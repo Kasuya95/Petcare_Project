@@ -41,10 +41,11 @@ const setUser = (user) => {
   };
 
   cookie.set("user", JSON.stringify(userData), {
-    path: "/",
-    expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
-    sameSite: "lax",
-  });
+  path: "/",
+  expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+  sameSite: "none",  // ✅
+  secure: true,      // ✅ HTTPS only
+});
 };
 
 /**
