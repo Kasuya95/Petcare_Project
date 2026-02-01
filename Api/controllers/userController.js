@@ -81,12 +81,13 @@ exports.login = async (req, res) => {
     const token = jwt.sign({ id: user._id, username: user.username }, process.env.SECRET || 'secret', { expiresIn: '1d' });
 
     // Set JWT in cookie
-    res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 24 * 60 * 60 * 1000 // 1 day
-    });
+   res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,        // ⭐ จำเป็นบน https (Vercel/Render)
+  sameSite: "none",    // ⭐ cross-site
+  maxAge: 24 * 60 * 60 * 1000,
+});
+
 
     console.log("✅ User logged in successfully:", user._id);
     res.json({
@@ -105,11 +106,12 @@ exports.logout = async (req, res) => {
     console.log("=== LOGOUT START ===");
     
     // Clear the token cookie
-    res.clearCookie('token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax'
-    });
+    res.clearCookie("token", {
+  httpOnly: true,
+  secure: true,
+  sameSite: "none",
+});
+
 
     console.log("✅ User logged out successfully");
     res.json({ message: "Logout successful" });
